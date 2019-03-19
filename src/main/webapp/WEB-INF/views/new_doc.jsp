@@ -10,5 +10,7 @@
 </head>
 <body>
 
+PASSWORD : ${sessionScope.uid}
+
 </body>
 </html>
