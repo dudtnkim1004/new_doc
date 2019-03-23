@@ -17,28 +17,34 @@
         messagingSenderId: "393936514150"
       };
       firebase.initializeApp(config);
-    </script>
+</script>
 </head>
 <body>
 <h1>
-	NEW DOCUMENT 
+	NEW DOCUMENT
 </h1>
-	<input type="button" id="newDoc">문서 생성
+	<input type="button" id="newDoc" value="문서생성">
     <script>
         function new_doc(){
             var uid = firebase.database().ref().child('docs').push().key;
+            
             console.log(uid);
             
             $.ajax({
             	url:"creatnewdoc",
             	data:{uid:uid},
-            	type:"POST"
-            	
+            	type:"POST",
+            	success :function(res){
+            		var randomValue = uid;
+            		
+            		location.href=res+"?randomValue="+randomValue;
+            	}
             })
         }
         document.addEventListener("DOMContentLoaded", function(){
             document.getElementById('newDoc').addEventListener('click', new_doc);
         });
     </script>
+	<input type="hidden" id="randomValue" value="${sessionScope.docInfo}">
 </body>
 </html>

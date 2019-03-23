@@ -4,7 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import global.sesoc.newdoc.VO.Newdoc;
+import global.sesoc.newdoc.VO.DocInfo;
 
 @Repository
 public class NewdocDAO {
@@ -12,44 +12,38 @@ public class NewdocDAO {
 	@Autowired
 	SqlSession session;
 	
-	public int createnewdoc(Newdoc newdoc) {
-		System.out.println("dao1 :" + newdoc);
+	 public int createnewdoc(DocInfo docinfo) {
 
 		int doc = 0;
+		
 		NewdocMapper mapper = session.getMapper(NewdocMapper.class);
 		try {
-			doc = mapper.createnewdoc(newdoc);
-
+			doc = mapper.createnewdoc(docinfo);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+	
 		return doc;
-	}
-
-	public int test(String uid) {
-		System.out.println("dao2 :" + uid);
-
-		int doc = 0;
-		NewdocMapper mapper = session.getMapper(NewdocMapper.class);
-		try {
-			doc = mapper.test(uid);
-
-		} catch (Exception e) {
+		
+	 }
+	
+	 public DocInfo selectuid(String password) {
+	 
+		 DocInfo docinfo = null;
+			
+		 NewdocMapper mapper = session.getMapper(NewdocMapper.class);
+		 try {
+			
+			 docinfo = mapper.selectuid(password);
+			
+		 } catch (Exception e) {
 			e.printStackTrace();
-		}
-
-		return doc;
-	}
-
-	/*
-	 * public int getpassword (String userpw) {
-	 * 
-	 * NewdocMapper mapper = session.getMapper(NewdocMapper.class);
-	 * 
-	 * int password = mapper.getpassword(userpw);
-	 * 
-	 * return password; }
-	 */
+		 }
+		
+		 return docinfo;
+	 
+	 }
+	 
 
 }

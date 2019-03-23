@@ -29,5 +29,10 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+	<!-- 세션 타임아웃 180 (단위:minute) -->
+	<session-config>
+		<session-timeout>180</session-timeout>
+	</session-config>
 
 </web-app>

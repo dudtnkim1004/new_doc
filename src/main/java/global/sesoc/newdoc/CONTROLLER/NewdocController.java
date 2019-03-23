@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import global.sesoc.newdoc.DAO.NewdocDAO;
-import global.sesoc.newdoc.VO.Newdoc;
+import global.sesoc.newdoc.VO.DocInfo;
 
 @Controller
 public class NewdocController {
@@ -19,44 +19,53 @@ public class NewdocController {
 	NewdocDAO dao;
 
 	@RequestMapping(value = "/creatnewdoc", method = RequestMethod.POST)
-	@ResponseBody
+	@ResponseBody //발생한 난수를 DB단에 저장 
 	public String createnewdoc(HttpSession session, String uid, HttpServletRequest request) {
 
-		Newdoc newdoc = new Newdoc();
-		System.out.println("controller uid :" + uid);
-		newdoc.setUsernum(uid);
-		System.out.println("controller :" + newdoc);
-
-		int result = dao.createnewdoc(newdoc);
+		DocInfo docinfo = new DocInfo();
+	
+		docinfo.setDoc_uid(uid);
+		
+		int result = dao.createnewdoc(docinfo);
+		
 		if (result != 0) {
-			session.setAttribute("uid", uid);
+		
+			session.setAttribute("docInfo", docinfo.getDoc_uid());
+			
 			return "new_doc";
 		} else {
+		
 			return "home";
 		}
 	}
+	
+	@RequestMapping(value = "/new_doc", method = RequestMethod.GET)
+	public String newdoc(String randomValue) {
+		//randomValue 를 찾아서 고유한 정보를 검색 후 화면으로 이동
+	return "new_doc";
+	}
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession session) {
+		
+		session.invalidate();
+	
+	return "redirect:/new_doc";
+	}
+	
+	@RequestMapping(value = "/selectuid", method = RequestMethod.POST)
+	@ResponseBody
+	public String selectuid(String password , HttpSession session) {
+		
+		DocInfo docinfo = new DocInfo();
 
-	/*
-	 * @RequestMapping(value = "/getpassword", method = RequestMethod.POST) public
-	 * String getpassword(HttpSession session , @RequestParam String userpw ,
-	 * HttpServletRequest request) {
-	 * 
-	 * int result = 0;
-	 * 
-	 * String password = request.getParameter(userpw);
-	 * 
-	 * result = dao.getpassword(userpw);
-	 * 
-	 * if (result == 1) {
-	 * 
-	 * session.setAttribute("password", password);
-	 * 
-	 * return "new_doc";
-	 * 
-	 * } else {
-	 * 
-	 * return "home";
-	 * 
-	 * } }
-	 */
+		docinfo = dao.selectuid(password);
+		
+		String getpassword = (String) session.getAttribute(docinfo.getDoc_uid());
+		
+		System.out.println(session.getAttribute(getpassword));
+		
+		return "confirm";
+		
+	}
 }

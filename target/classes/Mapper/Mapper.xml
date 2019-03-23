@@ -5,26 +5,39 @@
 
 <!-- 게시판 처리 SQL -->
 <mapper namespace="global.sesoc.newdoc.DAO.NewdocMapper">
-	<insert id="createnewdoc" parameterType="Newdoc">
-		INSERT INTO NEW_DOC
+	<insert id="createnewdoc" parameterType="DocInfo">
+		INSERT INTO DOC_INFO
 		(
-		USERNUM
+		DOC_UID
+		,REGDATE
+		,USER_UID
+		,DOC_PASSWORD
+		,DOC_TITLE
+		,DOC_DELETED
 		)
 		VALUES
 		(
-		#{usernum}
+		#{doc_uid}
+		,sysdate
+		,#{doc_uid}
+		,#{doc_uid}
+		,#{doc_title , jdbcType=VARCHAR}
+		,#{doc_deleted , jdbcType=VARCHAR}
 		)
 	</insert>
-
-	<insert id="test" parameterType="String">
-		INSERT INTO NEW_DOC
-		(
-		USERNUM
-		)
-		VALUES
-		(
-		#{param}
-		)
-	</insert>
-
+	
+	<select id="selectuid" parameterType="String" resultType="DocInfo">
+		SELECT 
+		DOC_UID
+		,to_char(regdate, 'YYYY-MM-DD') as regdate
+		,USER_UID
+		,DOC_PASSWORD
+		,DOC_TITLE
+		,DOC_DELETED 
+		FROM 
+		DOC_INFO 
+		WHERE 
+		DOC_UID=#{doc_uid}
+	</select>
+	
 </mapper>
